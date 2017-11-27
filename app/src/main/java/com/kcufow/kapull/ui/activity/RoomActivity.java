@@ -13,6 +13,7 @@ import com.ldw.kapull.R;
  */
 
 public  class RoomActivity extends PureActivity {
+    private static final String DEFAULT_TEST_URL = "rtmp://live.hkstv.hk.lxdns.com/live/hks";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 

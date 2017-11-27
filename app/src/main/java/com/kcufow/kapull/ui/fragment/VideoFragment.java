@@ -1,5 +1,8 @@
 package com.kcufow.kapull.ui.fragment;
 
+import android.os.Bundle;
+
+import com.ldw.kapull.R;
 import com.ldw.xbaselibrary.baseui.XBaseFragment;
 
 /**
@@ -19,6 +22,13 @@ public class VideoFragment extends XBaseFragment {
 
     @Override
     public int getLayoutId() {
-        return 0;
+        return R.layout.fragment_video;
+    }
+
+    public static VideoFragment newInstance(){
+        VideoFragment fragment = new VideoFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
     }
 }

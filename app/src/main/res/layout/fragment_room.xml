@@ -7,30 +7,51 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="@color/black">
-        <FrameLayout
+<!--        <FrameLayout
             android:id="@+id/frameVideo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center">
             <ProgressBar
-                android:id="@+id/pb_loading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 />
-        </FrameLayout>
+        </FrameLayout>-->
+        <com.pili.pldroid.player.widget.PLVideoTextureView
+            android:id="@+id/pl_video_view"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <ProgressBar
+            android:id="@+id/pb_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            />
+
 
         <ImageView
-            android:id="@+id/ivBack"
+            android:visibility="gone"
+            android:id="@+id/ivShare"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:layout_margin="10dp"
-            android:src="@drawable/btn_zhibojian_back_selector"/>
+            android:layout_alignParentRight="true"
+            android:src="@drawable/btn_zhibojian_fenxiang_selector"/>
         <RelativeLayout
             android:id="@+id/rlRoomInfo"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:layout_margin="10dp"
+                android:src="@drawable/btn_zhibojian_back_selector"/>
             <TextView
                 android:id="@+id/tvRoomTitle"
                 android:layout_width="match_parent"

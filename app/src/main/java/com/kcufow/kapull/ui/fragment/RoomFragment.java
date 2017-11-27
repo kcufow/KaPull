@@ -3,7 +3,12 @@ package com.kcufow.kapull.ui.fragment;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +20,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.kcufow.kapull.util.DensityUtil;
+import com.kcufow.kapull.util.LogUtil;
 import com.ldw.kapull.R;
 import com.ldw.xbaselibrary.baseui.XBaseFragment;
+import com.pili.pldroid.player.PLMediaPlayer;
 import com.pili.pldroid.player.widget.PLVideoTextureView;
+import com.pili.pldroid.player.widget.PLVideoView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,9 +38,9 @@ import butterknife.Unbinder;
 
 public class RoomFragment extends XBaseFragment {
 
+    private static final String TAG = "RoomFragment";
+    private static final int EVENT_SHOW_CONTROLER = 0;
 
-    @BindView(R.id.frameVideo)
-    FrameLayout frameVideo;
     @BindView(R.id.ivBack)
     ImageView ivBack;
     @BindView(R.id.ivShare)
@@ -50,7 +58,32 @@ public class RoomFragment extends XBaseFragment {
     @BindView(R.id.pb_loading)
     ProgressBar pbLoading;
     Unbinder unbinder;
+    private String url;
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
 
+            switch (msg.what){
+                case EVENT_SHOW_CONTROLER :
+
+                    viewGone(rlRoomInfo);
+
+                    break;
+                default:
+                    super.handleMessage(msg);
+                break;
+            }
+
+        }
+    };
+
+    public static RoomFragment newInstance(String url){
+        RoomFragment fragment = new RoomFragment();
+        fragment.url = url;
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
     public boolean isLandscape() {
         return getActivity().getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
     }
@@ -95,16 +128,33 @@ public class RoomFragment extends XBaseFragment {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+    @Override
+    public void initData(Bundle savedInstanceState) {
+
+        plVideoView.setVideoPath(url);
+        plVideoView.start();
+
+
+    }
 
     @Override
     public void initView() {
+        //加载视频播放器
+        plVideoView.setBufferingIndicator(pbLoading);
 
     }
-
     @Override
     public void setListener() {
+        plVideoView.setOnErrorListener(new PLMediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(PLMediaPlayer plMediaPlayer, int i) {
+                LogUtil.i(TAG,"onError :"+i);
 
+                return false;
+            }
+        });
     }
+
 
     @Override
     public int getLayoutId() {
@@ -112,10 +162,10 @@ public class RoomFragment extends XBaseFragment {
     }
 
 
-    @OnClick({R.id.frameVideo, R.id.ivBack, R.id.ivFullScreen})
+    @OnClick({ R.id.videoContent,R.id.ivBack, R.id.ivFullScreen})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.frameVideo:
+            case R.id.videoContent:
                 clickFrameVideo();
                 break;
             case R.id.ivBack:
@@ -129,7 +179,27 @@ public class RoomFragment extends XBaseFragment {
     }
 
     private void clickFrameVideo() {
+        int i = rlRoomInfo.getVisibility();
+       switch (i){
+           case View.VISIBLE:
+               viewGone(rlRoomInfo);
+//               viewVisible(rlRoomInfo);
 
+               break;
+           case View.INVISIBLE:
+               break;
+           case View.GONE:
+               showControlView();
+               break;
+       }
+
+    }
+
+    private void showControlView() {
+        rlRoomInfo.setVisibility(View.VISIBLE);
+        Message msg = Message.obtain();
+        msg.what = EVENT_SHOW_CONTROLER ;
+        handler.sendMessageDelayed(msg,5000);
     }
 
     @Override
