@@ -1,7 +1,9 @@
-package com.ldw.kapull;
+package com.kcufow.kapull;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.ldw.kapull.R;
 
 public class MainActivity extends AppCompatActivity {
 

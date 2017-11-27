@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/videoContent"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@color/black">
+        <FrameLayout
+            android:id="@+id/frameVideo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center">
+            <ProgressBar
+                android:id="@+id/pb_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                />
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:layout_margin="10dp"
+            android:src="@drawable/btn_zhibojian_back_selector"/>
+        <RelativeLayout
+            android:id="@+id/rlRoomInfo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/tvRoomTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:singleLine="true"/>
+            <ImageView
+                android:id="@+id/ivFullScreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:clickable="true"
+                android:layout_margin="10dp"
+                android:src="@drawable/btn_zhibojian_quanping_selector"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

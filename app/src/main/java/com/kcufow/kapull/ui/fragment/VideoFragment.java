@@ -1,12 +1,12 @@
-package com.ldw.kapull.ui.fragment;
+package com.kcufow.kapull.ui.fragment;
 
 import com.ldw.xbaselibrary.baseui.XBaseFragment;
 
 /**
- * Created by ldw on 2017/11/14.
+ * Created by ldw on 2017/11/16.
  */
 
-public class RoomFragment extends XBaseFragment {
+public class VideoFragment extends XBaseFragment {
     @Override
     public void initView() {
 

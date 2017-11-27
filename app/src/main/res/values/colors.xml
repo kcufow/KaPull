@@ -7,4 +7,5 @@
     <color name="white_transparent">#7fffffff</color>
 
     <color name="progressBarColor">#7fFB5553</color>
+    <color name="black">#000000</color>
 </resources>
