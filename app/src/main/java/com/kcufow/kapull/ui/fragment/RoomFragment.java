@@ -5,59 +5,51 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.kcufow.kapull.ui.base.BaseFragment;
 import com.kcufow.kapull.util.DensityUtil;
 import com.kcufow.kapull.util.LogUtil;
 import com.ldw.kapull.R;
-import com.ldw.xbaselibrary.baseui.XBaseFragment;
 import com.pili.pldroid.player.PLMediaPlayer;
 import com.pili.pldroid.player.widget.PLVideoTextureView;
-import com.pili.pldroid.player.widget.PLVideoView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
+
+
 
 /**
  * Created by ldw on 2017/11/14.
  */
 
-public class RoomFragment extends XBaseFragment {
+public class RoomFragment extends BaseFragment {
 
     private static final String TAG = "RoomFragment";
     private static final int EVENT_SHOW_CONTROLER = 0;
 
-    @BindView(R.id.ivBack)
+
     ImageView ivBack;
-    @BindView(R.id.ivShare)
+
     ImageView ivShare;
-    @BindView(R.id.tvRoomTitle)
+
     TextView tvRoomTitle;
-    @BindView(R.id.ivFullScreen)
+
     ImageView ivFullScreen;
-    @BindView(R.id.rlRoomInfo)
+
     RelativeLayout rlRoomInfo;
-    @BindView(R.id.videoContent)
+
     RelativeLayout videoContent;
-    @BindView(R.id.pl_video_view)
+
     PLVideoTextureView plVideoView;
-    @BindView(R.id.pb_loading)
+
     ProgressBar pbLoading;
-    Unbinder unbinder;
     private String url;
     private Handler handler = new Handler(){
         @Override
@@ -162,7 +154,6 @@ public class RoomFragment extends XBaseFragment {
     }
 
 
-    @OnClick({ R.id.videoContent,R.id.ivBack, R.id.ivFullScreen})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.videoContent:
@@ -205,6 +196,11 @@ public class RoomFragment extends XBaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        handler.removeMessages(EVENT_SHOW_CONTROLER);
     }
 }

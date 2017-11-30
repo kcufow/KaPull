@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.kcufow.kapull.ui.fragment.RoomFragment;
 import com.ldw.kapull.R;
 
 /**
@@ -36,6 +37,6 @@ public  class RoomActivity extends PureActivity {
 
     @Override
     public void initUI() {
-
+        replaceFragment(RoomFragment.newInstance(DEFAULT_TEST_URL));
     }
 }

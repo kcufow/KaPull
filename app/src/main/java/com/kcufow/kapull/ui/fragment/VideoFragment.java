@@ -2,16 +2,21 @@ package com.kcufow.kapull.ui.fragment;
 
 import android.os.Bundle;
 
+import com.kcufow.kapull.ui.base.BaseFragment;
 import com.ldw.kapull.R;
-import com.ldw.xbaselibrary.baseui.XBaseFragment;
 
 /**
  * Created by ldw on 2017/11/16.
  */
 
-public class VideoFragment extends XBaseFragment {
+public class VideoFragment extends BaseFragment {
     @Override
     public void initView() {
+
+    }
+
+    @Override
+    protected void initData(Bundle savedInstanceState) {
 
     }
 

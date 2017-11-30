@@ -8,4 +8,19 @@
 
     <color name="progressBarColor">#7fFB5553</color>
     <color name="black">#000000</color>
+
+    <color name="colorBlack">#ff000000</color>
+    <color name="colorDivider">#ffe2e2e2</color>
+    <color name="colorGray">#84000000</color>
+    <color name="colorGrayWhite">#ffdedede</color>
+    <color name="colorGrayWhitedeep">#ffc1c1c1</color>
+    <color name="colorGreen">#ff55fa8f</color>
+    <color name="colorMenu">#cc262a3b</color>
+    <color name="colorNormal">#ff898989</color>
+    <color name="colorPress">#ff6b6a6a</color>
+    <color name="colorToolbar">#99262a3b</color>
+    <color name="colorWhite">#ffffffff</color>
+    <color name="colorTopBar">#ff262a3b</color>
+    <color name="colorTopBarTranst">#55262a3b</color>
+    <color name="colorTransplate">#00000000</color>
 </resources>
