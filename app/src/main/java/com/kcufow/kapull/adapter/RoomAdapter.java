@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.kcufow.kapull.bean.panda.DataInfoList.DataBean.ItemsBean;
 import com.ldw.kapull.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -21,10 +22,11 @@ public class RoomAdapter extends RecyclerView.Adapter{
 
     private Context mContext;
     private List<ItemsBean> items;
+    private OnItemClickListener mItemClickListener;
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (mContext != null) {
+        if (mContext == null) {
             mContext = parent.getContext();
         }
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_rl_room, parent, false);
@@ -37,8 +39,12 @@ public class RoomAdapter extends RecyclerView.Adapter{
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         RoomViewHolder roomViewHolder = (RoomViewHolder) holder;
-//        items.get(position).
-
+        ItemsBean itemsBean = items.get(position);
+        roomViewHolder.tvName.setText(position+1+"、"+ itemsBean.getUserinfo().getNickName());
+        roomViewHolder.tvCount.setText(itemsBean.getName());
+        Picasso.with(mContext).load(itemsBean.getPictures().getImg())
+                .placeholder(R.mipmap.tv_item_default)
+                .into(roomViewHolder.ivIcon);
     }
 
     @Override
@@ -51,15 +57,33 @@ public class RoomAdapter extends RecyclerView.Adapter{
 
     }
 
-    class RoomViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvName;
-        public TextView tvCount;
-        public ImageView ivIcon;
-        public RoomViewHolder(View itemView) {
+
+    public interface OnItemClickListener{
+        void onItemClick(View view,int position);
+    }
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.mItemClickListener = listener;
+    }
+
+    private class RoomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView tvName;
+        TextView tvCount;
+        ImageView ivIcon;
+        RoomViewHolder(View itemView) {
             super(itemView);
             tvName = (TextView) itemView.findViewById(R.id.tv_name);
             tvCount = (TextView) itemView.findViewById(R.id.tv_playcount);
             ivIcon = (ImageView) itemView.findViewById(R.id.iv_img);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mItemClickListener != null) {
+                mItemClickListener.onItemClick(v,getAdapterPosition());
+            }
         }
     }
+
+
 }

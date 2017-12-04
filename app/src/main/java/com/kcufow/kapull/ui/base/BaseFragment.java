@@ -8,6 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.kcufow.kapull.Constant;
+import com.kcufow.kapull.net.Net;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by ldw on 2017/11/30.
  */
@@ -16,6 +22,7 @@ public abstract class BaseFragment extends Fragment{
     protected View rootView;
     protected LayoutInflater layoutInflater;
     protected AppCompatActivity mContext;
+    protected Map<String, String> params = new HashMap<>();
 
     @Nullable
     @Override
@@ -58,6 +65,13 @@ public abstract class BaseFragment extends Fragment{
     public <V extends View> V findView(int viewId) {
         V view = (V)(rootView.findViewById(viewId));
         return view;
+    }
+    protected void clearData(){
+        params.clear();
+    }
+    protected void initParams() {
+        params.put(Net.TVVERSION,Constant.VERSION);
+        params.put(Net.PLAT, Constant.PLAT);
     }
 
     protected abstract void initView();

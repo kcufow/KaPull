@@ -16,8 +16,7 @@ public abstract class DataInfoListCallback extends Callback<DataInfoList> {
     public DataInfoList parseNetworkResponse(Response response, int id) throws Exception {
         String s = response.body().string();
         Gson gson = new Gson();
-        DataInfoList dataInfoList = gson.fromJson(s, DataInfoList.class);
 
-        return dataInfoList;
+        return gson.fromJson(s, DataInfoList.class);
     }
 }

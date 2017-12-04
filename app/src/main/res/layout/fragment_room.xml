@@ -31,16 +31,8 @@
             />
 
 
-        <ImageView
-            android:visibility="gone"
-            android:id="@+id/ivShare"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:layout_margin="10dp"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/btn_zhibojian_fenxiang_selector"/>
         <RelativeLayout
+            android:fitsSystemWindows="true"
             android:id="@+id/rlRoomInfo"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -56,8 +48,7 @@
                 android:id="@+id/tvRoomTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:singleLine="true"/>
+                android:maxLines="1" />
             <ImageView
                 android:id="@+id/ivFullScreen"
                 android:layout_width="wrap_content"

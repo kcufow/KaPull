@@ -14,7 +14,6 @@ import com.ldw.kapull.R;
  */
 
 public  class RoomActivity extends PureActivity {
-    private static final String DEFAULT_TEST_URL = "rtmp://live.hkstv.hk.lxdns.com/live/hks";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -25,7 +24,7 @@ public  class RoomActivity extends PureActivity {
 //                            | View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         super.onCreate(savedInstanceState);
 
     }
@@ -37,6 +36,6 @@ public  class RoomActivity extends PureActivity {
 
     @Override
     public void initUI() {
-        replaceFragment(RoomFragment.newInstance(DEFAULT_TEST_URL));
+        replaceFragment(RoomFragment.newInstance());
     }
 }

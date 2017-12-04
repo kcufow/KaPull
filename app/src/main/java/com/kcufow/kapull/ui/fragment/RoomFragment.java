@@ -2,10 +2,12 @@ package com.kcufow.kapull.ui.fragment;
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,21 +17,29 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.kcufow.kapull.Constant;
+import com.kcufow.kapull.bean.panda. DataInfoList.DataBean.ItemsBean ;
+import com.kcufow.kapull.bean.panda.RoomInfo;
+import com.kcufow.kapull.manager.PlayListManager;
+import com.kcufow.kapull.net.Net;
+import com.kcufow.kapull.net.NetManager;
+import com.kcufow.kapull.net.callback.RoomInfoCallback;
 import com.kcufow.kapull.ui.base.BaseFragment;
 import com.kcufow.kapull.util.DensityUtil;
 import com.kcufow.kapull.util.LogUtil;
+import com.kcufow.kapull.util.T;
 import com.ldw.kapull.R;
 import com.pili.pldroid.player.PLMediaPlayer;
 import com.pili.pldroid.player.widget.PLVideoTextureView;
 
-
+import okhttp3.Call;
 
 
 /**
  * Created by ldw on 2017/11/14.
  */
 
-public class RoomFragment extends BaseFragment {
+public class RoomFragment extends BaseFragment implements View.OnClickListener {
 
     private static final String TAG = "RoomFragment";
     private static final int EVENT_SHOW_CONTROLER = 0;
@@ -68,16 +78,17 @@ public class RoomFragment extends BaseFragment {
 
         }
     };
+    private PlayListManager manager;
+    private int currentOrientation =Configuration.ORIENTATION_PORTRAIT;
 
-    public static RoomFragment newInstance(String url){
+    public static RoomFragment newInstance(){
         RoomFragment fragment = new RoomFragment();
-        fragment.url = url;
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
     public boolean isLandscape() {
-        return getActivity().getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+        return currentOrientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     public void clickFullScreen() {
@@ -110,6 +121,9 @@ public class RoomFragment extends BaseFragment {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        currentOrientation = newConfig.orientation;
+
+        showControlView();
         updateVideoLayoutParams();
     }
 
@@ -122,15 +136,35 @@ public class RoomFragment extends BaseFragment {
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        manager = PlayListManager.getInstance();
+        ItemsBean itemBean = manager.getItemBean();
+        String roomId =  itemBean.getId();
+        clearData();
+        initParams();
 
-        plVideoView.setVideoPath(url);
-        plVideoView.start();
+        getDataFromServer(roomId);
 
 
     }
-
+    protected void initParams() {
+       params.put(Net.ROOMID,"");
+       params.put(Net.SLAVEFLAG,Constant.SLAVEFLAG);
+       params.put(Net.TYPE,Constant.TYPE);
+        super.initParams();
+    }
     @Override
     public void initView() {
+        ivBack = findView(R.id.ivBack);
+        ivFullScreen = findView(R.id.ivFullScreen);
+        plVideoView = findView(R.id.pl_video_view);
+        tvRoomTitle = findView(R.id.tvRoomTitle);
+        pbLoading = findView(R.id.pb_loading);
+         videoContent = findView(R.id.videoContent);
+         rlRoomInfo = findView(R.id.rlRoomInfo);
+        ivBack.setOnClickListener(this);
+        ivFullScreen.setOnClickListener(this);
+        videoContent.setOnClickListener(this);
+
         //加载视频播放器
         plVideoView.setBufferingIndicator(pbLoading);
 
@@ -154,20 +188,6 @@ public class RoomFragment extends BaseFragment {
     }
 
 
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.videoContent:
-                clickFrameVideo();
-                break;
-            case R.id.ivBack:
-                clickBack();
-                break;
-            case R.id.ivFullScreen:
-                clickFullScreen();
-                break;
-
-        }
-    }
 
     private void clickFrameVideo() {
         int i = rlRoomInfo.getVisibility();
@@ -193,14 +213,60 @@ public class RoomFragment extends BaseFragment {
         handler.sendMessageDelayed(msg,5000);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         handler.removeMessages(EVENT_SHOW_CONTROLER);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.videoContent:
+                clickFrameVideo();
+                break;
+            case R.id.ivBack:
+
+                LogUtil.i(TAG,"back :---------");
+                clickBack();
+                break;
+            case R.id.ivFullScreen:
+                clickFullScreen();
+                break;
+
+        }
+    }
+
+    public void getDataFromServer(String roomId) {
+        params.put(Net.ROOMID,roomId);
+
+        NetManager.get(Net.BASEPLAYURL, params, new RoomInfoCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                T.showShort(mContext,"获取数据失败");
+            }
+
+            @Override
+            public void onResponse(RoomInfo response, int id) {
+                if (response == null) {
+
+                    T.showShort(mContext,"数据为空");
+                    return;
+                }
+                if (response.getErrno()!=0){
+                    T.showShort(mContext,"服务器数据为空");
+                    return;
+                }
+                String[] pl = response.getData().getInfo().getVideoinfo().getPlflag().split("_");
+                String path = "http://pl" + pl[(pl.length - 1)] + ".live.panda.tv/live_panda/"
+                        + response.getData().getInfo().getVideoinfo().getRoom_key() + "_mid.flv?sign="
+                        + response.getData().getInfo().getVideoinfo().getSign() +
+                        "&time=" + response.getData().getInfo().getVideoinfo().getTs();
+                plVideoView.setVideoPath(path);
+                plVideoView.start();
+
+            }
+        });
     }
 }
